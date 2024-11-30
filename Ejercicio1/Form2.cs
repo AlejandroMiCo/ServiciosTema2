@@ -16,6 +16,8 @@ namespace Ejercicio1
 
         bool changedText = false;
         string filePath;
+        string textoIni;
+        string textoFin;
         public Form2(FileInfo file)
         {
             InitializeComponent();
@@ -23,31 +25,48 @@ namespace Ejercicio1
             this.Text = file.Name;
             filePath = file.FullName;
 
-            using (StreamReader sr = new StreamReader(file.FullName))
+
+            try
             {
-                textBox1.Text = sr.ReadToEnd();
+                using (StreamReader sr = new StreamReader(file.FullName))
+                {
+                    textBox1.Text = sr.ReadToEnd();
+                    textoIni = textBox1.Text;
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("No posee los permisos necesarios para leer este archivo", "Error de permisos", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
 
-            if (changedText)
+            if (textoIni != textoFin)
             {
-                if (MessageBox.Show("Quieres guaradar los cambios?", "Guardar cambios", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+
+                try
                 {
-                    using (StreamWriter sw = new StreamWriter(filePath)) 
+                    if (MessageBox.Show("Quieres guaradar los cambios?", "Guardar cambios", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                     {
-                        sw.Write(textBox1.Text);
+                        using (StreamWriter sw = new StreamWriter(filePath))
+                        {
+                            sw.Write(textBox1.Text);
+                        }
                     }
-                                                 
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    MessageBox.Show("No posee los permisos necesarios para escribir en este archivo", "Error de permisos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 }
             }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            changedText = true;
+            textoFin = textBox1.Text;
         }
     }
 }

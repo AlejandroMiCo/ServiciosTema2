@@ -62,7 +62,7 @@ namespace Ejercicio1
                 catch (UnauthorizedAccessException)
                 {
                     //Regresa al directorio anterior en caso de no tener permisos
-                    MessageBox.Show("Acceso denegado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Acceso denegado, no tiene permisos para acceder a este directorio.\nVolvera al directorio anterior.", "Error de permisos", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Directory.SetCurrentDirectory("..");
                     txtDirectorio.Text = Directory.GetCurrentDirectory();
                     btnDir.PerformClick();
@@ -82,7 +82,7 @@ namespace Ejercicio1
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("Acceso denegado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Acceso denegado, no posee los permisos necesarios para acceder a este directorio", "Error de permisos", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
