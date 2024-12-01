@@ -70,6 +70,11 @@ namespace Ejercicio1
 
 
             }
+            else
+            {
+                MessageBox.Show("No se reconoce un directorio o una variable de entorno valida, intentelo de nuevo", "Error de ruta", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtDirectorio.Text = "";
+            }
         }
 
         private void listDirectorio_SelectedIndexChanged(object sender, EventArgs e)

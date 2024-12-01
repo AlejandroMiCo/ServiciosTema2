@@ -13,18 +13,17 @@ namespace Ejercicio1
 {
     public partial class Form2 : Form
     {
-
         bool changedText = false;
         string filePath;
         string textoIni;
         string textoFin;
+
         public Form2(FileInfo file)
         {
             InitializeComponent();
             textBox1.Size = ClientSize;
             this.Text = file.Name;
             filePath = file.FullName;
-
 
             try
             {
@@ -34,21 +33,35 @@ namespace Ejercicio1
                     textoIni = textBox1.Text;
                 }
             }
-            catch (UnauthorizedAccessException)
+            catch (Exception ex)
+                when (ex is UnauthorizedAccessException
+                    || ex is IOException
+                    || ex is ArgumentException
+                )
             {
-                MessageBox.Show("No posee los permisos necesarios para leer este archivo", "Error de permisos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "No posee los permisos necesarios para leer este archivo",
+                    "Error de permisos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
-
             if (textoIni != textoFin)
             {
-
                 try
                 {
-                    if (MessageBox.Show("Quieres guaradar los cambios?", "Guardar cambios", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                    if (
+                        MessageBox.Show(
+                            "Quieres guaradar los cambios?",
+                            "Guardar cambios",
+                            MessageBoxButtons.OKCancel,
+                            MessageBoxIcon.Question
+                        ) == DialogResult.OK
+                    )
                     {
                         using (StreamWriter sw = new StreamWriter(filePath))
                         {
@@ -56,10 +69,18 @@ namespace Ejercicio1
                         }
                     }
                 }
-                catch (UnauthorizedAccessException)
+                catch (Exception ex)
+                    when (ex is UnauthorizedAccessException
+                        || ex is IOException
+                        || ex is ArgumentException
+                    )
                 {
-                    MessageBox.Show("No posee los permisos necesarios para escribir en este archivo", "Error de permisos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                    MessageBox.Show(
+                        "No posee los permisos necesarios para escribir en este archivo",
+                        "Error de permisos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                 }
             }
         }
